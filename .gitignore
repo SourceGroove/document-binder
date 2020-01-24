@@ -1,0 +1,10 @@
+.idea
+release.sh
+**/.project
+.factorypath
+**/.classpath
+**/.settings/
+.DS_Store
+*.iml
+**/target
+**/spring.log
