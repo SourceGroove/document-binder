@@ -21,23 +21,29 @@ public class Binder {
     public void setName(String name) {
         this.name = name;
     }
+
     public String getName() {
         return this.name;
     }
+
     public int getNumberOfDocuments() {
         return numberOfDocuments;
     }
-    public void setNumberOfDocuments(int numberOfDocuments) { }
+
+    public void setNumberOfDocuments(int numberOfDocuments) {
+    }
 
     public List<BinderNode> getNodes() {
         return Collections.unmodifiableList(this.nodes);
     }
-    public void setNodes(List<BinderNode> nodes){ }
 
-    public BinderFolder getFolderAtPath(String path){
+    public void setNodes(List<BinderNode> nodes) {
+    }
+
+    public BinderFolder getFolderAtPath(String path) {
         BinderNode node = getNodeAtPath(this.nodes, path);
-        if(node instanceof BinderFolder){
-            return (BinderFolder)node;
+        if (node instanceof BinderFolder) {
+            return (BinderFolder) node;
         } else {
             return null;
         }
@@ -54,15 +60,21 @@ public class Binder {
         if (StringUtils.isBlank(path)) {
             path = PATH_SEPARATOR;
         }
-        BinderFolder parent = getFolderAtPath(path);
-        if (parent == null) {
-            parent = add(path);
-        }
 
+        if (StringUtils.length(path) == PATH_SEPARATOR.length()) {
+            this.nodes.add(document);
+
+        } else {
+            BinderFolder parent = getFolderAtPath(path);
+            if (parent == null) {
+                parent = add(path);
+            }
+            parent.add(document);
+        }
         numberOfDocuments++;
-        parent.add(document);
     }
-    public BinderFolder add(String path){
+
+    public BinderFolder add(String path) {
         String[] segments = StringUtils.split(path, PATH_SEPARATOR);
         if (segments.length > MAX_DEPTH) {
             throw new IllegalArgumentException("Path depth exceeds limit of " + MAX_DEPTH);
@@ -77,7 +89,7 @@ public class Binder {
             BinderNode node = getFolderAtPath(absolutePath);
             if (node != null) {
                 log.trace("Node exists at path " + absolutePath);
-                parent = (BinderFolder)node;
+                parent = (BinderFolder) node;
                 continue;
             }
 
